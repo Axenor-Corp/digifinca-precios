@@ -47,6 +47,15 @@ pestaña **Actions → Actualizar precios → Run workflow**.
 "Sin cambios que publicar" es lo normal casi todos los días). El historial de
 commits de `precios.json` es el registro de precios publicados.
 
+Una corrida en **rojo** significa que el robot encontró algo raro y prefirió no
+publicar (la fuente cambió de redacción, o una cifra saltaría más de 25 %). El
+log dice cuál fue y con qué artículo; se corrige el extractor o se edita el
+precio a mano.
+
+GitHub **desactiva los workflows programados** de un repo sin actividad durante
+60 días y avisa por correo; si pasa, basta con entrar a Actions y darle
+"Enable workflow".
+
 ## Editar a mano (excepcional)
 
 Se puede editar `precios.json` directamente en GitHub; el robot respeta el
