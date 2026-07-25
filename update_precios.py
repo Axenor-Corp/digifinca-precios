@@ -35,6 +35,9 @@ MIN_COP, MAX_COP = 5_000, 20_000
 # unos pocos puntos; un salto mayor es casi seguro un error de lectura, así que
 # el bot NO publica y deja el aviso en el log para revisarlo a mano.
 MAX_SALTO = 0.25
+# El boletín es SEMANAL: si pasan 3 semanas sin uno nuevo, la fuente cambió y
+# hay que revisar — el robot lo grita en vez de dejar los precios congelados.
+DIAS_ALERTA = 21
 
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
          "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
@@ -144,6 +147,20 @@ def parse_article(html):
     return published, promedios, extras
 
 
+def alerta_si_esta_viejo(fecha_vigente):
+    """Falla (rojo en Actions + correo) si el catálogo lleva demasiado sin
+    renovarse: significa que la fuente cambió y el robot dejó de encontrar
+    boletines. Sin esto, los precios se congelarían EN SILENCIO."""
+    dias = (datetime.now(timezone.utc) - fecha_vigente).days
+    if dias > DIAS_ALERTA:
+        print(f"ALERTA: el catálogo lleva {dias} días sin renovarse "
+              f"(último boletín {fecha_vigente.date()}). Revisar si la fuente "
+              f"cambió de formato o de dirección.")
+        return 1
+    print(f"catálogo al día ({dias} días desde el último boletín)")
+    return 0
+
+
 def main():
     with open("precios.json", encoding="utf-8") as f:
         vigente = json.load(f)
@@ -169,7 +186,7 @@ def main():
         if published <= fecha_vigente:
             print(f"sin cambios: el boletín de {published.date()} no es más "
                   f"nuevo que el vigente ({fecha_vigente.date()})")
-            return
+            return alerta_si_esta_viejo(fecha_vigente)
         # Salto absurdo contra el catálogo vigente ⇒ casi seguro un error de
         # lectura (la fuente cambió de redacción): NO publicar, avisar.
         previos = {e["categoria"]: e["copPorKg"] for e in vigente["entradas"]}
@@ -207,6 +224,7 @@ def main():
               + ", ".join(f"{e['categoria']} ${e['copPorKg']}" for e in entradas))
         return
     print("sin cambios: ningún boletín nuevo utilizable")
+    return alerta_si_esta_viejo(fecha_vigente)
 
 
 if __name__ == "__main__":
