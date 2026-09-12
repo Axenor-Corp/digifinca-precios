@@ -2,24 +2,30 @@
   "pais": "CO",
   "paisNombre": "Colombia",
   "fuente": "Subastas ganaderas (Fedegán/Asosubastas)",
-  "semana": "boletín del 27 de agosto de 2026",
-  "fecha": "2026-08-27T15:41:00Z",
+  "semana": "boletín del 10 de septiembre de 2026",
+  "fecha": "2026-09-10T22:09:09Z",
   "entradas": [
     {
       "categoria": "Macho de ceba (gordo)",
-      "copPorKg": 8290,
+      "copPorKg": 9134,
       "minCop": null,
       "maxCop": null
     },
     {
       "categoria": "Hembra de levante",
-      "copPorKg": 7723,
+      "copPorKg": 8122,
       "minCop": null,
       "maxCop": null
     },
     {
       "categoria": "Macho de levante",
-      "copPorKg": 9272,
+      "copPorKg": 9099,
+      "minCop": null,
+      "maxCop": null
+    },
+    {
+      "categoria": "Hembra de vientre",
+      "copPorKg": 8735,
       "minCop": null,
       "maxCop": null
     }
